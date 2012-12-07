@@ -16,7 +16,47 @@ class Player < Chingu::GameObject
 		@x = 400
 		@y = 300
 		@image = Gosu::Image["Ship.png"]
+		self.input = {
+			holding_left: :left,
+			holding_right: :right,
+			holding_up: :up,
+			holding_down: :down,
+			space: :fire
+		}
+
 	end
+
+	def left
+		@x -= 5
+	end
+
+	def right
+		@x += 5
+	end
+
+	def up
+		@y -= 5
+	end
+
+	def down
+		@y += 5
+	end
+
+	def fire
+		Laser.create(x: @x, y: @y)
+	end
+
+end
+
+class Laser < Chingu::GameObject
+
+	has_traits :velocity
+
+	def setup
+		@image = Gosu::Image["shot.png"]
+		self.velocity_y = -10
+	end
+
 
 end
 
