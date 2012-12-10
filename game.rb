@@ -9,13 +9,13 @@ class Game < Chingu::Window
 		5.times {Meteor.create}
 		Player.create
 	end
-	def update
-		super
-		Laser.each_bounding_circle_collision(Meteor) do |laser, target|
-      		laser.destroy
-      		target.destroy
-      	end
-    end
+	 def update
+	 	super
+	 	Laser.each_bounding_circle_collision(Meteor) do |laser, target|
+       		laser.destroy
+       		target.destroy
+       	end
+     end
 
 end
 
@@ -35,15 +35,17 @@ class Player < Chingu::GameObject
 		}
 		@speed = 10
 		@angle = 0
+		@animation = Chingu::Animation.new(:file => "flame_48x48.png")
+		@animation.frame_names = { still: => 0..1, :up => 2..5, :fire => 6..7}
 	end
 
-	def update
-		self.velocity_x *= 0.95
-		self.velocity_y *= 0.95
+	 def update
+	 	self.velocity_x *= 0.95
+	 	self.velocity_y *= 0.95
 
-		@x %= 800
-		@y %= 600
-	end
+	 	@x %= 800
+	 	@y %= 600
+	 end
 
 
 	def left
@@ -57,6 +59,7 @@ class Player < Chingu::GameObject
 	def up
 		self.velocity_y += Gosu::offset_y(@angle, 0.5) 
 		self.velocity_x += Gosu::offset_x(@angle, 0.5) 
+		@frame_name = :up
 	end
 
 	def down
@@ -65,9 +68,11 @@ class Player < Chingu::GameObject
 	end
 
 	def fire
-		Laser.create(x: self.x, y: self.y, angle: self.angle)
+		Laser.create(x: @x, y: @y, angle: @angle)
 	end
 end
+
+
 
 class Laser < Chingu::GameObject
 
@@ -83,9 +88,8 @@ class Laser < Chingu::GameObject
 		@x %= 800
 		@y %= 600
 	end
-
-
 end
+
 
 class Level < Chingu::GameObject
 	def setup
