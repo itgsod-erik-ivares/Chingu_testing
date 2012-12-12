@@ -33,11 +33,11 @@ class Game < Chingu::Window
 end
 
 	# game over skylten när man dör
-# class Go < Chingu::GameObject
-# 	@x = 400
-# 	@y = 300
-# 	@image = Gosu::Image["gameover.png"]
-# end
+ class Go < Chingu::GameObject
+ 	@x = 400
+ 	@y = 300
+ 	@image = Gosu::Image["gameover.png"]
+ end
 
 class Player < Chingu::GameObject
 	has_traits :velocity, :collision_detection, :timer
