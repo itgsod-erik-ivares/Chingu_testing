@@ -8,10 +8,10 @@ class Game < Chingu::Window
 	def initialize
 		super
 		self.input = {esc: :exit}	
-			self.caption = "Astroid game! Made myself! fps = #{self.fps}"
 		#retrofy
-		#Level.create
+		Level.create
 		5.times {Meteor.create}
+		2.times {Astroid.create}
 		Player.create
 	end
 	def update
@@ -21,16 +21,26 @@ class Game < Chingu::Window
        		laser.destroy
        		target.destroy
        	end
-       	# Meteor.each_bounding_circle_collision(Player) do |meteor, player|
-       	# 	player.destroy
-       	# 	meteror.destroy
-       	# end
+       	 Meteor.each_bounding_circle_collision(Player) do |meteor, player|
+       	 	GO.new
+       	 end
+	 	Astroid.each_bounding_circle_collision(Meteor) do |laser, target|
+       		laser.destroy
+       		@hp = -1
+       	end
     end
 
 end
 
+	# game over skylten när man dör
+# class Go < Chingu::GameObject
+# 	@x = 400
+# 	@y = 300
+# 	@image = Gosu::Image["gameover.png"]
+# end
+
 class Player < Chingu::GameObject
-	has_traits :velocity, :timer
+	has_traits :velocity, :collision_detection, :timer
 #:collision_detection, :bounding_circle,
 	#meta construktur
 	def setup
@@ -118,6 +128,20 @@ class Level < Chingu::GameObject
 
 end
 
+class Astroid < Chingu::GameObject
+
+	has_traits :collision_detection, :bounding_circle, :velocity
+
+	@hp = 2
+
+	def setup
+		@image = Gosu::Image["crystal.png"]
+		@angle = rand(359)
+		self.velocity_y += Gosu::offset_y(@angle, rand(1...6))
+		self.velocity_x += Gosu::offset_x(@angle, rand(1...6))
+
+	end
+end
 class Meteor < Chingu::GameObject
 
 	has_traits :collision_detection, :bounding_circle, :velocity
