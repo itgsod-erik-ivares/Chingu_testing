@@ -1,43 +1,43 @@
-require 'rubygems' rescue nil
-$LOAD_PATH.unshift File.join(File.expand_path(__FILE__), "..", "..", "lib")
+# require 'rubygems' rescue nil
 require 'chingu'
-include Gosu
-include Chingu
+#include Gosu
+#include Chingu
 
 class Game < Chingu::Window
 
 	def initialize
 		super
 		self.input = {esc: :exit}	
-			self.caption = "Astroid game! Made myself!"
+			self.caption = "Astroid game! Made myself! fps = #{self.fps}"
 		#retrofy
-		Level.create
+		#Level.create
 		5.times {Meteor.create}
 		Player.create
 	end
-	 def update
-	 	super
+	def update
+	 	super	
+			self.caption = "Astroid game! Made myself! fps = #{self.fps}"
 	 	Laser.each_bounding_circle_collision(Meteor) do |laser, target|
        		laser.destroy
        		target.destroy
        	end
-       	Meteor.each_bounding_circle_collision(Player) do |meteor, player|
-       		player.destroy
-       		meteror.destroy
-       	end
-     end
+       	# Meteor.each_bounding_circle_collision(Player) do |meteor, player|
+       	# 	player.destroy
+       	# 	meteror.destroy
+       	# end
+    end
 
 end
 
 class Player < Chingu::GameObject
-	has_traits :velocity, :collision_detection, :bounding_circle, :timer
-
+	has_traits :velocity, :timer
+#:collision_detection, :bounding_circle,
 	#meta construktur
 	def setup
 		super
 		@x = 400
 		@y = 300
-		@image = Gosu::Image["Ship.png"]
+		#@image = Gosu::Image["Ship.png"]
 		 self.input = {
 		 	holding_left: :left,
 		 	holding_right: :right,
@@ -47,7 +47,7 @@ class Player < Chingu::GameObject
 		 }
 		@speed = 10
 		@angle = 0
-		@animation = Chingu::Animation.new(:file => "flame_48x48.png")
+		@animation = Chingu::Animation.new(:file => "flame_48x48.bmp")
 		@animation.frame_names = { :still =>0..1, :up =>2..5, :fire =>6..7}
 # :still =>0..1, :fire =>6..7, :up =>2..5
 		@frame_name = :still
